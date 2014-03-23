@@ -1,0 +1,78 @@
+using UnityEngine;
+using System.Collections;
+
+public class GameCameraOpt : MonoBehaviour {
+
+	public Transform target; //player set to target
+	public float cameraOffsetX; //offsetmarker from player
+	public float cameraOffsetY; //offsetmarker from player
+	private float cameraX;
+	private float cameraY;
+	private float tagX;//tags for camera to move at
+	private float tagY;//tags for camera to move at
+	public float cameraSpeed=0.05f;
+
+	void Start () {
+		tagX = target.position.x;
+		tagY = target.position.y;
+	}
+
+	void LateUpdate() {
+		if (target)
+		{
+
+			if (Input.GetAxis ("Horizontal") != 0) 
+			{
+				//player is moving
+				//set tag x on movement direction from player! AMOUNT increases 
+				incTagX(cameraSpeed);
+
+				moveCameraTowardsTag();
+
+
+			}
+			if (Input.GetAxis ("Horizontal") == 0) 
+			{
+				//player is NOT moving
+				tagX = target.position.x;
+				tagY = target.position.y;
+
+				moveCameraTowardsTag();
+
+			}
+
+			//update camera on player all the time!
+			//cameraX = setCameraOffsetX (cameraOffsetX);
+			//cameraY = setCameraOffsetY (cameraOffsetY);
+
+			transform.position = new Vector3 (cameraX, cameraY, transform.position.z);
+
+		
+		}
+	}
+
+	//
+	// FUNX
+	//
+
+	void setCameraCoords(float x, float ox, float y, float oy)
+	{
+		cameraX = x + ox;
+		cameraY = y + oy;
+	}
+	void incTagX(float x)
+	{
+		tagX = tagX + x;
+	}
+	void incTagY(float y)
+	{
+		tagY = tagY + y;
+	}
+	void moveCameraTowardsTag()
+	{
+		//camera on player
+		//setCameraCoords(target.position.x,0,target.position.y,0.3f);
+		//camera on tag
+		setCameraCoords(tagX,0,tagY,0.3f);
+	}
+}
